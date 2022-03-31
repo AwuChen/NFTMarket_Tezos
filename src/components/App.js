@@ -60,16 +60,24 @@ const App = () => {
 
 
     useEffect(()=>{
-        dispatch(fetchContractData({Tezos}));
-    },[Tezos, dispatch]);
+        dispatch(fetchData());
+    },[dispatch]);
 
     return (
         <div className="ui container">
             <Header Tezos={Tezos} setTezos={setTezos} wallet={wallet} />
-            <div className="ui container center aligned">
-                <p className="ui">User Address: {selector.walletConfig.user.userAddress}</p>
-                <p className="ui">User Balance: {selector.walletConfig.user.balance}</p>
-                <p className="ui">Storage: {selector.contractStorage} </p>
+            <div className="ui container">
+                <Switch>
+                    <Route path="/create">
+                        <Create Tezos={Tezos}/>
+                    </Route>
+                    <Route path="/show/:id">
+                        <Show Tezos={Tezos}/>
+                    </Route>
+                    <Route path="/">
+                        <Home Tezos={Tezos}/>
+                    </Route>
+                </Switch>
             </div>
         </div>
     );
