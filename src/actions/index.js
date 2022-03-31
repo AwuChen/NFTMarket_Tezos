@@ -3,7 +3,7 @@ import {
   NetworkType,
 } from "@airgap/beacon-sdk";
 import config from '../config';
-
+import axios from "axios";
 
 
 export const connectWallet = ({wallet, Tezos}) => {
@@ -63,86 +63,6 @@ export const disconnectWallet = ({wallet, setTezos}) => {
         }
       };
 }
-export const fetchContractData = ({Tezos}) => {
-    return async (dispatch, getState) => {
-        try {
-            const contract = await Tezos.wallet.at(config.contractAddress);
-
-            const storage = await contract.storage();
-            dispatch({type:"SET_VALUE", payload: storage.toNumber()});
-        }catch(e){
-            //dispatch
-            console.log(e);
-        }
-    }
-}
-
-export const incrementData = ({Tezos}) => {
-    return async (dispatch, getState) => {
-        try{
-            const contract = await Tezos.wallet.at(config.contractAddress);
-
-            const op = await contract.methods.increment(1).send();
-            await op.confirmation();
-            const newStorage = await contract.storage();
-            dispatch({type:"SET_VALUE", payload: newStorage.toNumber()});
-        }catch(e){
-            console.log(e);
-        }
-    }
-}
-
-
-export const decrementData = ({Tezos}) => {
-    return async (dispatch, getState) => {
-        try{
-            const contract = await Tezos.wallet.at(config.contractAddress);
-
-            const op = await contract.methods.decrement(1).send();
-            await op.confirmation();
-            const newStorage = await contract.storage();
-            dispatch({type:"SET_VALUE", payload: newStorage.toNumber()});
-        }catch(e){
-            console.log(e);
-        }
-    }
-}
-
-
-export const mintNFT = ({ Tezos, amount, metadata }) => {
-	return async (dispatch) => {
-		try {
-			const contract = await Tezos.wallet.at(config.contractAddress);
-			let bytes = "";
-			for (var i = 0; i < metadata.length; i++) {
-				bytes += metadata.charCodeAt(i).toString(16).slice(-4);
-			}
-			const op = await contract.methods.mint(amount, bytes).send();
-			await op.confirmation();
-            dispatch(fetchData());
-		} catch (e) {
-			console.log(e);
-		}
-	};
-};
-
-
-export const collectNFT = ({ Tezos, amount, id }) => {
-	return async (dispatch) => {
-		try {
-			const contract = await Tezos.wallet.at(config.contractAddress);
-
-			const op = await contract.methods
-				.collect(id)
-				.send({ mutez: true, amount: amount });
-			await op.confirmation();
-            dispatch(fetchData());
-		} catch (e) {
-			console.log(e);
-		}
-	};
-};
-
 
 export const hex2buf = (hex) => {
 	return new Uint8Array(
@@ -153,7 +73,6 @@ export const hex2buf = (hex) => {
 export function bytes2Char(hex) {
 	return Buffer.from(hex2buf(hex)).toString("utf8");
 }
-
 
 export const fetchData = () => {
 	return async (dispatch) => {
@@ -192,15 +111,37 @@ export const fetchData = () => {
 };
 
 
-const tokenDataReducer=(state=[], action)=>{
-    switch(action.type){
-        case "SET_TOKEN_DATA":
-            return action.payload;
-        default:
-            return state;
-    }
-}
+export const mintNFT = ({ Tezos, amount, metadata }) => {
+	return async (dispatch) => {
+		try {
+			const contract = await Tezos.wallet.at(config.contractAddress);
+			let bytes = "";
+			for (var i = 0; i < metadata.length; i++) {
+				bytes += metadata.charCodeAt(i).toString(16).slice(-4);
+			}
+			const op = await contract.methods.mint(amount, bytes).send();
+			await op.confirmation();
+            dispatch(fetchData());
+		} catch (e) {
+			console.log(e);
+		}
+	};
+};
 
-const reducers = combineReducers({walletConfig: connectWalletReducer, tokenData: tokenDataReducer});
 
+export const collectNFT = ({ Tezos, amount, id }) => {
+	return async (dispatch) => {
+		try {
+			const contract = await Tezos.wallet.at(config.contractAddress);
+
+			const op = await contract.methods
+				.collect(id)
+				.send({ mutez: true, amount: amount });
+			await op.confirmation();
+            dispatch(fetchData());
+		} catch (e) {
+			console.log(e);
+		}
+	};
+};
 

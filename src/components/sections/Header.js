@@ -1,6 +1,7 @@
-import { Link } from 'react-router-dom';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { connectWallet, disconnectWallet, incrementData, decrementData } from '../actions';
+import { Link } from 'react-router-dom';
+import { connectWallet, disconnectWallet } from '../../actions';
 
 const Header = ({Tezos, wallet, setTezos}) => {
     const selector = useSelector(state => {return state.walletConfig.user});

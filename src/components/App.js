@@ -1,6 +1,6 @@
 import React,{ useState, useEffect } from 'react';
-import Header from './Header';
-import { useSelector, useDispatch } from 'react-redux';
+import Header from './sections/Header';
+import { useDispatch } from 'react-redux';
 import { TezosToolkit} from "@taquito/taquito";
 import { BeaconWallet } from "@taquito/beacon-wallet";
 import {
@@ -10,8 +10,6 @@ import {
   ColorMode
 } from "@airgap/beacon-sdk";
 
-import { fetchContractData, _walletConfig } from '../actions';
-
 import { fetchData, _walletConfig } from '../actions';
 import { Route, Switch } from 'react-router';
 import Home from './layouts/Home';
@@ -19,7 +17,6 @@ import Create from './layouts/Create';
 import Show from './layouts/Show';
 
 const App = () => {
-    const selector = useSelector(state => state);
     const dispatch = useDispatch();
     const [Tezos, setTezos] = useState(
         new TezosToolkit("https://granadanet.smartpy.io/")
@@ -29,7 +26,7 @@ const App = () => {
     useEffect(()=>{
         (async () => {
             const wallet_instance = new BeaconWallet({
-                name: "Template",
+                name: "NFT marketplace",
                 preferredNetwork: NetworkType.GRANADANET,
                 colorMode: ColorMode.LIGHT,
                 disableDefaultEvents: false, // Disable all events / UI. This also disables the pairing alert.
@@ -61,7 +58,7 @@ const App = () => {
 
     useEffect(()=>{
         dispatch(fetchData());
-    },[dispatch]);
+    },[Tezos, dispatch]);
 
     return (
         <div className="ui container">

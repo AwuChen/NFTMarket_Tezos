@@ -6,10 +6,10 @@ import { createStore, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 import { persistStore } from "redux-persist";
 import { PersistGate } from "redux-persist/integration/react";
+import { BrowserRouter } from "react-router-dom";
 
 import persistedReducers from "./reducers";
 
-import { BrowserRouter } from "react-router-dom";
 
 const store = createStore(persistedReducers, applyMiddleware(thunk));
 
