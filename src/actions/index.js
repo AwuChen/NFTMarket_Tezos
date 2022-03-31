@@ -142,3 +142,14 @@ export const collectNFT = ({ Tezos, amount, id }) => {
 		}
 	};
 };
+
+
+export const hex2buf = (hex) => {
+	return new Uint8Array(
+		hex.match(/[\da-f]{2}/gi).map((h) => parseInt(h, 16))
+	);
+};
+
+export function bytes2Char(hex) {
+	return Buffer.from(hex2buf(hex)).toString("utf8");
+}
