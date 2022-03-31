@@ -190,3 +190,15 @@ export const fetchData = () => {
 		}
 	};
 };
+
+
+const tokenDataReducer=(state=[], action)=>{
+    switch(action.type){
+        case "SET_TOKEN_DATA":
+            return action.payload;
+        default:
+            return state;
+    }
+}
+
+const reducers = combineReducers({walletConfig: connectWalletReducer, tokenData: tokenDataReducer});
