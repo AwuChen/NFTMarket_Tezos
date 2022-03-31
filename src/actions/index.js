@@ -204,16 +204,3 @@ const tokenDataReducer=(state=[], action)=>{
 const reducers = combineReducers({walletConfig: connectWalletReducer, tokenData: tokenDataReducer});
 
 
-import { BrowserRouter } from "react-router-dom";
-
-ReactDOM.render(
-	<Provider store={store}>
-		<PersistGate loading={null} persistor={persistStore(store)}>
-			<BrowserRouter>
-				<App />
-			</BrowserRouter>
-		</PersistGate>
-	</Provider>,
-	document.querySelector("#root")
-);
-
