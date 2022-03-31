@@ -153,3 +153,40 @@ export const hex2buf = (hex) => {
 export function bytes2Char(hex) {
 	return Buffer.from(hex2buf(hex)).toString("utf8");
 }
+
+
+export const fetchData = () => {
+	return async (dispatch) => {
+		try {
+			const response = await axios.get(
+				`https://api.granadanet.tzkt.io/v1/contracts/${config.contractAddress}/bigmaps/data/keys`
+			);
+			const response1 = await axios.get(
+				`https://api.granadanet.tzkt.io/v1/contracts/${config.tokenAddress}/bigmaps/token_metadata/keys`
+			);
+			const d1 = response.data;
+			const d2 = response1.data;
+			let tokenData = [];
+			for (let i = 0; i < d1.length; i++) {
+				const s = bytes2Char(d2[i].value.token_info[""])
+					.split("//")
+					.at(-1);
+
+				const res = await axios.get("https://ipfs.io/ipfs/" + s);
+
+				const l1 = d1[i].value;
+				const l2 = res.data;
+				tokenData[i] = {
+					...l1,
+					...l2,
+					token_id: d2[i].value.token_id,
+				};
+			}
+			console.log(tokenData);
+			dispatch({ type: "SET_TOKEN_DATA", payload: tokenData });
+
+		} catch (e) {
+			console.log(e);
+		}
+	};
+};
