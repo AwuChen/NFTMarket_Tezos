@@ -12,6 +12,12 @@ import {
 
 import { fetchContractData, _walletConfig } from '../actions';
 
+import { fetchData, _walletConfig } from '../actions';
+import { Route, Switch } from 'react-router';
+import Home from './layouts/Home';
+import Create from './layouts/Create';
+import Show from './layouts/Show';
+
 const App = () => {
     const selector = useSelector(state => state);
     const dispatch = useDispatch();
