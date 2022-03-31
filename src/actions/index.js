@@ -202,3 +202,47 @@ const tokenDataReducer=(state=[], action)=>{
 }
 
 const reducers = combineReducers({walletConfig: connectWalletReducer, tokenData: tokenDataReducer});
+
+
+import { BrowserRouter } from "react-router-dom";
+
+ReactDOM.render(
+	<Provider store={store}>
+		<PersistGate loading={null} persistor={persistStore(store)}>
+			<BrowserRouter>
+				<App />
+			</BrowserRouter>
+		</PersistGate>
+	</Provider>,
+	document.querySelector("#root")
+);
+
+import { fetchData, _walletConfig } from '../actions';
+import { Route, Switch } from 'react-router';
+import Home from './layouts/Home';
+import Create from './layouts/Create';
+import Show from './layouts/Show';
+
+
+ return (
+        <div className="ui container">
+            <Header Tezos={Tezos} setTezos={setTezos} wallet={wallet} />
+            <div className="ui container">
+                <Switch>
+                    <Route path="/create">
+                        <Create Tezos={Tezos}/>
+                    </Route>
+                    <Route path="/show/:id">
+                        <Show Tezos={Tezos}/>
+                    </Route>
+                    <Route path="/">
+                        <Home Tezos={Tezos}/>
+                    </Route>
+                </Switch>
+            </div>
+        </div>
+    );
+
+    useEffect(()=>{
+        dispatch(fetchData());
+    },[dispatch]);
