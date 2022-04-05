@@ -1,68 +1,63 @@
 import { TezosToolkit } from "@taquito/taquito";
-import {
-  NetworkType,
-} from "@airgap/beacon-sdk";
-import config from '../config';
+import { NetworkType } from "@airgap/beacon-sdk";
+import config from "../config";
 import axios from "axios";
 
+export const connectWallet = ({ wallet, Tezos }) => {
+	return async (dispatch) => {
+		try {
+			var payload = {};
 
-export const connectWallet = ({wallet, Tezos}) => {
-    return async (dispatch)=>{
-        try {
-            var payload = {};
+			Tezos.setWalletProvider(wallet);
 
-            Tezos.setWalletProvider(wallet)
+			const activeAccount = await wallet.client.getActiveAccount();
+			if (!activeAccount) {
+				await wallet.requestPermissions({
+					network: {
+						type: NetworkType.GRANADANET,
+						rpcUrl: "https://granadanet.smartpy.io/",
+					},
+				});
+			}
+			const userAddress = await wallet.getPKH();
+			const balance = await Tezos.tz.getBalance(userAddress);
 
-            const activeAccount = await wallet.client.getActiveAccount();
-            if(!activeAccount){
-                await wallet.requestPermissions({
-                network: {
-                    type: NetworkType.GRANADANET,
-                    rpcUrl: "https://granadanet.smartpy.io/"
-                }
-                });
-            }
-            const userAddress = await wallet.getPKH();
-            const balance = await Tezos.tz.getBalance(userAddress);
-
-            payload.user = {
-                userAddress : userAddress,
-                balance : balance.toNumber()
-            }
-            dispatch(_walletConfig(payload.user));
-
-          } catch (error) {
-              console.log(error);
-              dispatch({
-                  type: "CONNECT_WALLET_ERROR",
-              })  
-        }
-    }
-}
+			payload.user = {
+				userAddress: userAddress,
+				balance: balance.toNumber(),
+			};
+			dispatch(_walletConfig(payload.user));
+		} catch (error) {
+			console.log(error);
+			dispatch({
+				type: "CONNECT_WALLET_ERROR",
+			});
+		}
+	};
+};
 
 export const _walletConfig = (user) => {
-    return {
-        type:"CONNECT_WALLET",
-        user,
-    }
-}
+	return {
+		type: "CONNECT_WALLET",
+		user,
+	};
+};
 
-export const disconnectWallet = ({wallet, setTezos}) => {
-    return async (dispatch) => {
+export const disconnectWallet = ({ wallet, setTezos }) => {
+	return async (dispatch) => {
+		setTezos(new TezosToolkit("https://granadanet.smartpy.io/"));
 
-        setTezos(new TezosToolkit("https://granadanet.smartpy.io/"));
+		dispatch({
+			type: "DISCONNECT_WALLET",
+		});
 
-        dispatch({
-            type:"DISCONNECT_WALLET",
-        });
-
-        if(wallet){
-            await wallet.client.removeAllAccounts();
-            await wallet.client.removeAllPeers();
-            await wallet.client.destroy();
-        }
-      };
-}
+		if (wallet) {
+			await wallet.client.removeAllAccounts();
+			await wallet.client.removeAllPeers();
+			await wallet.client.destroy();
+		}
+	};
+};
 
 export const hex2buf = (hex) => {
 	return new Uint8Array(
@@ -110,7 +105,6 @@ export const fetchData = () => {
 	};
 };
 
-
 export const mintNFT = ({ Tezos, amount, metadata }) => {
 	return async (dispatch) => {
 		try {
@@ -128,7 +122,6 @@ export const mintNFT = ({ Tezos, amount, metadata }) => {
 	};
 };
 
-
 export const collectNFT = ({ Tezos, amount, id }) => {
 	return async (dispatch) => {
 		try {
@@ -144,4 +137,3 @@ export const collectNFT = ({ Tezos, amount, id }) => {
 		}
 	};
 };
-
