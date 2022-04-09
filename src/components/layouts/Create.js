@@ -6,7 +6,7 @@ import { mintNFT } from "../../actions";
 import { useDispatch } from "react-redux";
 
 const apiKey =
-	"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDFhYTNhOTc0MDMzRTQ3NTdDQUUyMEIxMmU2NkQ2Nzk0QTljQjVhODUiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY0ODcwMzExNTI0NywibmFtZSI6Ik1lbWVudG9zIn0.RHURVuPM0pR9SLxqyzYYY1lefdiqCQEchTLQ15y04RU";
+	"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDY0NmFmRGIyMjhhMGY1RjFhMURDNDQyMjFCQ0E4YTIwNTNlNWUzQzIiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTYyNDY0NjcyNjUwMiwibmFtZSI6IlRleiBCeXRlcyJ9.JfjY624-uOXE9naYfN7Z8QfY1bbO_bZcVihhHL5ke3I";
 const client = new NFTStorage({ token: apiKey });
 
 const Create = ({ Tezos }) => {
