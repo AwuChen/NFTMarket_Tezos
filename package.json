@@ -4,9 +4,9 @@
   "private": true,
   "dependencies": {
     "@airgap/beacon-sdk": "^2.3.10",
-    "@taquito/beacon-wallet": "^9.2.0",
+    "@taquito/beacon-wallet": "^12.0.3",
     "@taquito/ledger-signer": "^9.0.0",
-    "@taquito/taquito": "^9.2.0",
+    "@taquito/taquito": "^12.0.3",
     "@taquito/tzip12": "^9.1.1",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
